@@ -1,0 +1,159 @@
+{% extends "base.html" %}
+
+{% block title %}Post a Job - Smart Job Portal{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="row justify-content-center">
+        <div class="col-md-10">
+            <div class="card">
+                <div class="card-header">
+                    <h2>Post a New Job</h2>
+                </div>
+                <div class="card-body">
+                    <form method="POST" action="{{ url_for('post_job') }}">
+                        <!-- Job Basic Info -->
+                        <div class="row mb-3">
+                            <div class="col-md-12">
+                                <label class="form-label">Job Title *</label>
+                                <input type="text" class="form-control" name="title" required>
+                            </div>
+                        </div>
+                        
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label class="form-label">Job Type *</label>
+                                <select class="form-select" name="job_type" required>
+                                    <option value="">Select Job Type</option>
+                                    <option value="full-time">Full Time</option>
+                                    <option value="part-time">Part Time</option>
+                                    <option value="contract">Contract</option>
+                                    <option value="internship">Internship</option>
+                                    <option value="remote">Remote</option>
+                                </select>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label">Experience Level *</label>
+                                <select class="form-select" name="experience_level" required>
+                                    <option value="">Select Experience Level</option>
+                                    <option value="entry">Entry Level</option>
+                                    <option value="mid">Mid Level</option>
+                                    <option value="senior">Senior Level</option>
+                                    <option value="executive">Executive</option>
+                                </select>
+                            </div>
+                        </div>
+                        
+                        <!-- Job Description -->
+                        <div class="mb-3">
+                            <label class="form-label">Job Description *</label>
+                            <textarea class="form-control" name="description" rows="6" required placeholder="Describe the role, responsibilities, and what you're looking for in a candidate"></textarea>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label class="form-label">Requirements</label>
+                            <textarea class="form-control" name="requirements" rows="4" placeholder="List the skills, qualifications, and experience required"></textarea>
+                        </div>
+                        
+                        <!-- Company Info -->
+                        <h4 class="mt-4 mb-3">Company Information</h4>
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label class="form-label">Company Name *</label>
+                                <input type="text" class="form-control" name="company_name" required value="{{ current_user.company_name or '' }}">
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label">Company Website</label>
+                                <input type="url" class="form-control" name="company_website" placeholder="https://">
+                            </div>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label class="form-label">Company Description</label>
+                            <textarea class="form-control" name="company_description" rows="3" placeholder="Brief description of your company"></textarea>
+                        </div>
+                        
+                        <!-- Location -->
+                        <h4 class="mt-4 mb-3">Location</h4>
+                        <div class="row mb-3">
+                            <div class="col-md-4">
+                                <label class="form-label">Location *</label>
+                                <input type="text" class="form-control" name="location" required placeholder="e.g., New York, NY">
+                            </div>
+                            <div class="col-md-4">
+                                <label class="form-label">City</label>
+                                <input type="text" class="form-control" name="city">
+                            </div>
+                            <div class="col-md-4">
+                                <label class="form-label">Country</label>
+                                <input type="text" class="form-control" name="country">
+                            </div>
+                        </div>
+                        
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" name="is_remote" id="is_remote">
+                                    <label class="form-check-label" for="is_remote">
+                                        This is a remote position
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" name="is_hybrid" id="is_hybrid">
+                                    <label class="form-check-label" for="is_hybrid">
+                                        Hybrid work option available
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Salary -->
+                        <h4 class="mt-4 mb-3">Salary Information</h4>
+                        <div class="row mb-3">
+                            <div class="col-md-4">
+                                <label class="form-label">Minimum Salary (USD)</label>
+                                <input type="number" class="form-control" name="salary_min" placeholder="50000">
+                            </div>
+                            <div class="col-md-4">
+                                <label class="form-label">Maximum Salary (USD)</label>
+                                <input type="number" class="form-control" name="salary_max" placeholder="100000">
+                            </div>
+                            <div class="col-md-4">
+                                <label class="form-label">Currency</label>
+                                <select class="form-select" name="salary_currency">
+                                    <option value="USD" selected>USD</option>
+                                    <option value="EUR">EUR</option>
+                                    <option value="GBP">GBP</option>
+                                    <option value="INR">INR</option>
+                                </select>
+                            </div>
+                        </div>
+                        
+                        <!-- Education & Extra -->
+                        <div class="row mb-4">
+                            <div class="col-md-6">
+                                <label class="form-label">Education Required</label>
+                                <input type="text" class="form-control" name="education_required" placeholder="e.g., Bachelor's in Computer Science">
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-check mt-4">
+                                    <input class="form-check-input" type="checkbox" name="is_featured" id="is_featured">
+                                    <label class="form-check-label" for="is_featured">
+                                        Feature this job (highlighted in search results)
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="d-grid">
+                            <button type="submit" class="btn btn-primary btn-lg">Post Job</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

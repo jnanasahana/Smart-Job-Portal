@@ -1,0 +1,209 @@
+/* Main Styles */
+:root {
+    --primary-color: #4361ee;
+    --secondary-color: #3a0ca3;
+    --success-color: #4cc9f0;
+    --light-color: #f8f9fa;
+    --dark-color: #212529;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    color: #333;
+    line-height: 1.6;
+}
+
+/* Navigation */
+.navbar-brand {
+    font-weight: 700;
+    font-size: 1.5rem;
+}
+
+/* Hero Section */
+.hero-section {
+    background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+}
+
+/* Cards */
+.card {
+    border: none;
+    border-radius: 10px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+}
+
+.job-card {
+    height: 100%;
+}
+
+.job-card .card-footer {
+    border-top: 1px solid #eee;
+}
+
+/* Category Cards */
+.category-card {
+    color: #333;
+    transition: all 0.3s ease;
+}
+
+.category-card:hover {
+    color: var(--primary-color);
+    transform: translateY(-5px);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+}
+
+.category-icon {
+    color: var(--primary-color);
+}
+
+/* Forms */
+.form-control:focus {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 0.25rem rgba(67, 97, 238, 0.25);
+}
+
+.btn-primary {
+    background-color: var(--primary-color);
+    border-color: var(--primary-color);
+}
+
+.btn-primary:hover {
+    background-color: var(--secondary-color);
+    border-color: var(--secondary-color);
+}
+
+/* Progress Bars */
+.progress {
+    border-radius: 10px;
+}
+
+.progress-bar {
+    background-color: var(--primary-color);
+}
+
+/* Badges */
+.badge {
+    padding: 0.5em 0.8em;
+    border-radius: 20px;
+}
+
+/* Footer */
+footer a {
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+footer a:hover {
+    color: white !important;
+}
+
+/* Dashboard Stats */
+.stat-card {
+    border-radius: 10px;
+    color: white;
+}
+
+.stat-card .card-title {
+    font-size: 2rem;
+    font-weight: bold;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .hero-section .display-4 {
+        font-size: 2rem;
+    }
+    
+    .search-section .form-control-lg {
+        font-size: 1rem;
+    }
+}
+
+/* Animations */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.fade-in {
+    animation: fadeIn 0.5s ease-out;
+}
+
+/* Loading Spinner */
+.spinner {
+    width: 40px;
+    height: 40px;
+    border: 4px solid #f3f3f3;
+    border-top: 4px solid var(--primary-color);
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* Match Score Indicator */
+.match-indicator {
+    display: inline-block;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    margin-right: 5px;
+}
+
+.match-high { background-color: #4CAF50; }
+.match-medium { background-color: #FFC107; }
+.match-low { background-color: #F44336; }
+
+/* Job Status Badges */
+.status-badge {
+    padding: 3px 8px;
+    border-radius: 4px;
+    font-size: 0.8rem;
+    font-weight: 600;
+}
+
+.status-pending { background-color: #FFF3CD; color: #856404; }
+status-reviewed { background-color: #D1ECF1; color: #0C5460; }
+.status-shortlisted { background-color: #D4EDDA; color: #155724; }
+.status-rejected { background-color: #F8D7DA; color: #721C24; }
+.status-hired { background-color: #CCE5FF; color: #004085; }
+
+/* Skill Tags */
+.skill-tag {
+    display: inline-block;
+    background-color: #E9ECEF;
+    padding: 4px 10px;
+    margin: 2px;
+    border-radius: 20px;
+    font-size: 0.9rem;
+}
+
+.skill-tag-primary {
+    background-color: #D1E7FF;
+    color: var(--primary-color);
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+    width: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: #f1f1f1;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #555;
+}

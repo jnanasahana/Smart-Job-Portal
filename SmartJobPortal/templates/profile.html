@@ -1,0 +1,148 @@
+{% extends "base.html" %}
+
+{% block title %}Profile - Smart Job Portal{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-md-4">
+            <!-- Profile Card -->
+            <div class="card mb-4">
+                <div class="card-body text-center">
+                    <div class="mb-3">
+                        <div class="profile-pic-placeholder rounded-circle bg-primary text-white d-inline-flex align-items-center justify-content-center" 
+                             style="width: 100px; height: 100px; font-size: 2rem;">
+                            {{ user.first_name[0] if user.first_name else 'U' }}
+                        </div>
+                    </div>
+                    <h4>{{ user.get_full_name() }}</h4>
+                    <p class="text-muted">{{ user.headline or 'No headline set' }}</p>
+                    <p><i class="fas fa-envelope"></i> {{ user.email }}</p>
+                    {% if user.phone %}
+                    <p><i class="fas fa-phone"></i> {{ user.phone }}</p>
+                    {% endif %}
+                    {% if user.location %}
+                    <p><i class="fas fa-map-marker-alt"></i> {{ user.location }}</p>
+                    {% endif %}
+                </div>
+            </div>
+            
+            <!-- Quick Stats -->
+            <div class="card">
+                <div class="card-header">
+                    <h5>Quick Stats</h5>
+                </div>
+                <div class="card-body">
+                    <p><strong>User Type:</strong> {{ user.user_type|replace('_', ' ')|title }}</p>
+                    <p><strong>Member Since:</strong> {{ user.created_at.strftime('%Y-%m-%d') }}</p>
+                    {% if user.user_type == 'job_seeker' %}
+                    <p><strong>Applications:</strong> {{ user.applications|length }}</p>
+                    <p><strong>Skills:</strong> {{ user.get_skills_list()|length }}</p>
+                    {% elif user.user_type == 'employer' %}
+                    <p><strong>Jobs Posted:</strong> {{ user.jobs_posted|length }}</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-8">
+            <!-- Profile Form -->
+            <div class="card">
+                <div class="card-header">
+                    <h4>Edit Profile</h4>
+                </div>
+                <div class="card-body">
+                    <form method="POST" action="{{ url_for('profile') }}">
+                        <!-- Personal Info -->
+                        <h5 class="mb-3">Personal Information</h5>
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label class="form-label">First Name *</label>
+                                <input type="text" class="form-control" name="first_name" value="{{ user.first_name or '' }}" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label">Last Name *</label>
+                                <input type="text" class="form-control" name="last_name" value="{{ user.last_name or '' }}" required>
+                            </div>
+                        </div>
+                        
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label class="form-label">Phone</label>
+                                <input type="tel" class="form-control" name="phone" value="{{ user.phone or '' }}">
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label">Location</label>
+                                <input type="text" class="form-control" name="location" value="{{ user.location or '' }}" placeholder="e.g., New York, NY">
+                            </div>
+                        </div>
+                        
+                        <!-- Professional Info -->
+                        <h5 class="mt-4 mb-3">Professional Information</h5>
+                        <div class="mb-3">
+                            <label class="form-label">Headline</label>
+                            <input type="text" class="form-control" name="headline" value="{{ user.headline or '' }}" placeholder="e.g., Senior Python Developer">
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label class="form-label">Bio / Summary</label>
+                            <textarea class="form-control" name="bio" rows="3">{{ user.bio or '' }}</textarea>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label class="form-label">Skills (comma separated)</label>
+                            <textarea class="form-control" name="skills" rows="2" placeholder="e.g., Python, JavaScript, React, AWS">{{ user.skills or '' }}</textarea>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label class="form-label">Experience</label>
+                            <textarea class="form-control" name="experience" rows="4" placeholder="Describe your work experience">{{ user.experience or '' }}</textarea>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label class="form-label">Education</label>
+                            <textarea class="form-control" name="education" rows="3" placeholder="List your educational background">{{ user.education or '' }}</textarea>
+                        </div>
+                        
+                        <!-- Preferences -->
+                        <h5 class="mt-4 mb-3">Job Preferences</h5>
+                        <div class="mb-3">
+                            <label class="form-label">Preferred Locations (comma separated)</label>
+                            <input type="text" class="form-control" name="preferred_locations" value="{{ user.preferred_locations or '' }}" placeholder="e.g., New York, Remote, London">
+                        </div>
+                        
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label class="form-label">Salary Expectation (USD/year)</label>
+                                <input type="number" class="form-control" name="salary_expectation" value="{{ user.salary_expectation or '' }}">
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-check mt-4">
+                                    <input class="form-check-input" type="checkbox" name="remote_preference" id="remote_preference" {% if user.remote_preference %}checked{% endif %}>
+                                    <label class="form-check-label" for="remote_preference">
+                                        Prefer remote work
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Resume -->
+                        <h5 class="mt-4 mb-3">Resume</h5>
+                        <div class="mb-3">
+                            <label class="form-label">Paste Your Resume Text</label>
+                            <textarea class="form-control" name="resume_text" rows="6" placeholder="Paste your resume text here for better job matching">{{ user.resume_text or '' }}</textarea>
+                            <div class="form-text">
+                                This helps our AI match you with relevant jobs. You can copy-paste from your resume file.
+                            </div>
+                        </div>
+                        
+                        <div class="d-grid">
+                            <button type="submit" class="btn btn-primary">Update Profile</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

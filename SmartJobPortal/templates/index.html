@@ -1,0 +1,177 @@
+{% extends "base.html" %}
+
+{% block title %}Home - Smart Job Portal{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="hero-section text-center rounded">
+    <div class="container">
+        <h1 class="display-4 fw-bold mb-4">Find Your Dream Job with AI</h1>
+        <p class="lead mb-4">Smart matching technology connects you with perfect opportunities based on your skills and preferences.</p>
+        
+        {% if not current_user.is_authenticated %}
+            <div class="mt-4">
+                <a href="{{ url_for('register') }}" class="btn btn-light btn-lg me-3">
+                    <i class="fas fa-user-plus"></i> Sign Up Free
+                </a>
+                <a href="{{ url_for('jobs') }}" class="btn btn-outline-light btn-lg">
+                    <i class="fas fa-search"></i> Browse Jobs
+                </a>
+            </div>
+        {% else %}
+            <div class="mt-4">
+                {% if current_user.user_type == 'job_seeker' %}
+                    <a href="{{ url_for('jobs') }}" class="btn btn-light btn-lg me-3">
+                        <i class="fas fa-bolt"></i> Find Jobs
+                    </a>
+                {% else %}
+                    <a href="{{ url_for('post_job') }}" class="btn btn-light btn-lg me-3">
+                        <i class="fas fa-plus"></i> Post a Job
+                    </a>
+                {% endif %}
+                <a href="{{ url_for('dashboard') }}" class="btn btn-outline-light btn-lg">
+                    <i class="fas fa-tachometer-alt"></i> Dashboard
+                </a>
+            </div>
+        {% endif %}
+    </div>
+</section>
+
+<!-- Search Section -->
+<section class="search-section mb-5">
+    <div class="container">
+        <div class="card shadow-lg">
+            <div class="card-body p-4">
+                <h3 class="card-title mb-4">Find Your Next Opportunity</h3>
+                <form action="{{ url_for('jobs') }}" method="GET">
+                    <div class="row g-3">
+                        <div class="col-md-5">
+                            <div class="input-group">
+                                <span class="input-group-text"><i class="fas fa-search"></i></span>
+                                <input type="text" name="search" class="form-control form-control-lg" 
+                                       placeholder="Job title, skills, or company">
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="input-group">
+                                <span class="input-group-text"><i class="fas fa-map-marker-alt"></i></span>
+                                <input type="text" name="location" class="form-control form-control-lg" 
+                                       placeholder="City, state, or remote">
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <button type="submit" class="btn btn-primary btn-lg w-100">
+                                <i class="fas fa-search"></i> Search Jobs
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Features Section -->
+<section class="features-section mb-5">
+    <div class="container">
+        <h2 class="text-center mb-5">Why Choose Smart Job Portal?</h2>
+        <div class="row">
+            <div class="col-md-4 mb-4">
+                <div class="card h-100 text-center">
+                    <div class="card-body">
+                        <div class="feature-icon mb-3">
+                            <i class="fas fa-robot fa-3x text-primary"></i>
+                        </div>
+                        <h4 class="card-title">AI-Powered Matching</h4>
+                        <p class="card-text">Our intelligent algorithm matches your skills and preferences with the perfect job opportunities.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 mb-4">
+                <div class="card h-100 text-center">
+                    <div class="card-body">
+                        <div class="feature-icon mb-3">
+                            <i class="fas fa-bolt fa-3x text-primary"></i>
+                        </div>
+                        <h4 class="card-title">Smart Applications</h4>
+                        <p class="card-text">Get AI-powered feedback on your applications and improve your chances of getting hired.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 mb-4">
+                <div class="card h-100 text-center">
+                    <div class="card-body">
+                        <div class="feature-icon mb-3">
+                            <i class="fas fa-chart-line fa-3x text-primary"></i>
+                        </div>
+                        <h4 class="card-title">Career Insights</h4>
+                        <p class="card-text">Get personalized career recommendations and skill gap analysis.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Featured Jobs -->
+{% if featured_jobs %}
+<section class="featured-jobs mb-5">
+    <div class="container">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h2>Featured Jobs</h2>
+            <a href="{{ url_for('jobs') }}" class="btn btn-outline-primary">View All Jobs</a>
+        </div>
+        
+        <div class="row">
+            {% for job in featured_jobs %}
+            <div class="col-md-6 col-lg-4 mb-4">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between mb-3">
+                            <span class="badge bg-primary">{{ job.job_type|replace('-', ' ')|title }}</span>
+                            {% if job.is_remote %}
+                            <span class="badge bg-success">Remote</span>
+                            {% endif %}
+                        </div>
+                        <h5 class="card-title">{{ job.title }}</h5>
+                        <p class="card-text text-muted">{{ job.company_name }}</p>
+                        <p class="card-text">
+                            <i class="fas fa-map-marker-alt"></i> {{ job.location }}
+                        </p>
+                        {% if job.salary_min %}
+                        <p class="card-text">
+                            <i class="fas fa-money-bill-wave"></i> 
+                            ${{ "{:,}".format(job.salary_min) }} - ${{ "{:,}".format(job.salary_max or job.salary_min * 2) }}
+                        </p>
+                        {% endif %}
+                    </div>
+                    <div class="card-footer bg-transparent">
+                        <a href="{{ url_for('job_detail', job_id=job.id) }}" class="btn btn-primary w-100">
+                            View Details
+                        </a>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+{% endif %}
+
+<!-- CTA Section -->
+<section class="cta-section bg-light py-5 rounded">
+    <div class="container text-center">
+        <h2 class="mb-4">Ready to Advance Your Career?</h2>
+        <p class="lead mb-4">Join professionals who found their dream jobs through our platform.</p>
+        {% if not current_user.is_authenticated %}
+        <a href="{{ url_for('register') }}" class="btn btn-primary btn-lg">
+            <i class="fas fa-user-plus"></i> Create Free Account
+        </a>
+        {% else %}
+        <a href="{{ url_for('jobs') }}" class="btn btn-primary btn-lg">
+            <i class="fas fa-search"></i> Browse Jobs
+        </a>
+        {% endif %}
+    </div>
+</section>
+{% endblock %}
